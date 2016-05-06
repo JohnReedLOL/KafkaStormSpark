@@ -178,7 +178,7 @@ class KafkaSparkStreamingSpec extends FeatureSpec with Matchers with BeforeAndAf
             kafkaParams,
             Map(inputTopic.name -> 1),
             storageLevel = StorageLevel.MEMORY_ONLY_SER // or: StorageLevel.MEMORY_AND_DISK_SER
-          ).map(_._2)
+          ).map(_ ._2)
         }
         val unifiedStream = ssc.union(streams) // Merge the "per-partition" DStreams
         val sparkProcessingParallelism = 1 // You'd probably pick a higher value than 1 in production.
@@ -219,13 +219,13 @@ class KafkaSparkStreamingSpec extends FeatureSpec with Matchers with BeforeAndAf
         }
       }.foreachRDD(rdd => {
         rdd.foreachPartition(partitionOfRecords => {
-          val p = producerPool.value.borrowObject()
+          val pool = producerPool.value.borrowObject()
           partitionOfRecords.foreach { case tweet: Tweet =>
             val bytes = converter.value.apply(tweet)
-            p.send(bytes)
+            pool.send(bytes)
             numOutputMessages += 1
           }
-          producerPool.value.returnObject(p)
+          producerPool.value.returnObject(pool)
         })
       })
 
