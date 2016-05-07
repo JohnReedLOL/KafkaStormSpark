@@ -8,6 +8,10 @@ import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{FunSpec, GivenWhenThen, Matchers}
 
+import scala.trace.Debug
+import scala.trace.Pos
+import format.Format
+
 class KafkaProducerAppSpec extends FunSpec with Matchers with GivenWhenThen with MockitoSugar with LazyLogging {
 
   private val AnyTopic = "some-default-topic"
@@ -18,6 +22,19 @@ class KafkaProducerAppSpec extends FunSpec with Matchers with GivenWhenThen with
   private val AnyValue = Array[Byte]()
 
   describe("A KafkaProducerApp") {
+
+    it("should work with Scala Trace Debug") {
+      Given("Scala Trace Debug")
+      When("I tell it to print ")
+      println(Format.text( "Hello World This Is A Format Example " +
+        "- Hello World This Is A Format Example2 - Hello World This Is A Format Example3"
+        + Pos() ))
+      Debug.trace("Hello World")
+      Debug.println() // Not supposed to happen
+      Then("it should print")
+
+      1 should be(1)
+    }
 
     it("should let the user configure the broker list") {
       Given("no app")

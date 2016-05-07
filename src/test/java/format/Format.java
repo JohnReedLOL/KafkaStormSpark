@@ -4,7 +4,7 @@ package format;
  * Created by johnreed on 5/7/16.
  */
 public class Format {
-    private static int _lineWrap = 80;
+    private static int _lineWrap = 100;
 
     public static int getLineWrap() {
         return _lineWrap;
